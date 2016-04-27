@@ -1,6 +1,6 @@
 # Thinodium
 
-[![Build Status](https://travis-ci.org/hiddentao/thinodium.svg?branch=master)](http://travis-ci.org/hiddentao/thinodium) [![NPM module](https://badge.fury.io/js/thinodium.png)](https://badge.fury.io/js/thinodium)
+[![Build Status](https://travis-ci.org/hiddentao/thinodium.svg?branch=master)](http://travis-ci.org/hiddentao/thinodium)
 
 A "thin ODM" which is less opinionated and tries to give you query flexibility 
 whilst still providing helpful document handling.
