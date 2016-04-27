@@ -1,0 +1,45 @@
+{
+  "name": "thinodium",
+  "version": "1.0.0",
+  "description": "Light-weight, pluggable ODM for Node.js. Supports RethinkDB, etc",
+  "main": "index.js",
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "engine-strict": true,
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hiddentao/thinodium.git"
+  },
+  "keywords": [
+    "mongo",
+    "mongodb",
+    "rethinkdb",
+    "odm",
+    "nosql",
+    "validation"
+  ],
+  "author": "Ramesh Nair <ram@hiddentao.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiddentao/thinodium/issues"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "co-mocha": "^1.1.0",
+    "gulp": "~3.8.1",
+    "gulp-mocha": "~0.4.1",
+    "mocha": "^2.1.0",
+    "sinon": "^1.12.2",
+    "sinon-chai": "^2.6.0"
+  },
+  "homepage": "https://github.com/hiddentao/thinodium",
+  "dependencies": {
+    "bluebird": "^3.3.5",
+    "lodash": "^4.11.1",
+    "simple-nosql-schema": "^1.0.0"
+  }
+}
