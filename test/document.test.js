@@ -338,5 +338,69 @@ test['reload'] = {
 
 
 
+test['virtuals'] = {
+  beforeEach: function*() {
+    this.d = new Document({
+      pk: '_id',
+    }, {
+      _id: 123,
+      name: 'john',
+    });
+  },
+  'can add': function*() {
+    let doc = this.d;
 
+    doc.addVirtual('url', {
+      get: function() {
+        return `/path/${this.name}`;
+      }
+    });
+
+    doc.url.should.eql(`/path/${doc.name}`);
+  },
+  'no setter by default': function*() {
+    let doc = this.d;
+
+    doc.addVirtual('url', {
+      get: function() {
+        return `/path/${this.name}`;
+      }
+    });
+
+    expect(() => {
+      doc.url = 'test';
+    }).to.throw(`Cannot set url: read-only virtual`);
+  },
+  'add setter': function*() {
+    let doc = this.d;
+
+    doc.addVirtual('url', {
+      get: function() {
+        return `/path/${this.name}`;
+      },
+      set: function(val) {
+        this.name = val;
+      }
+    });
+
+    doc.url = 'test';
+
+    doc.name.should.eql('test');
+  },
+  'included in toJSON': function*() {
+    let doc = this.d;
+
+    doc.addVirtual('url', {
+      get: function() {
+        return `/path/${this.name}`;
+      },
+    });
+
+    doc.toJSON().should.eql({
+      id: 123,
+      name: 'john',
+      url: '/path/john',
+    });
+  }
+};
 

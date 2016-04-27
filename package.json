@@ -39,7 +39,10 @@
   "homepage": "https://github.com/hiddentao/thinodium",
   "dependencies": {
     "bluebird": "^3.3.5",
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
     "lodash": "^4.11.1",
-    "simple-nosql-schema": "^1.0.0"
+    "simple-nosql-schema": "^1.0.0",
+    "sinon-chai": "^2.8.0"
   }
 }

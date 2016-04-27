@@ -8,6 +8,7 @@ var chai = require('chai'),
   sinon = require('sinon');
 
 chai.use(require('sinon-chai'));
+chai.use(require('chai-as-promised'));
 
 exports.assert = chai.assert;
 exports.expect = chai.expect;
