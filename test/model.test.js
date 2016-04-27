@@ -169,3 +169,74 @@ test['wrap doc'] = {
 
 
 
+
+test['events'] = {
+  beforeEach: function*() {
+    class TestModel extends Model {}
+
+    ['_insert', '_remove', '_update', '_get'].forEach((method) => {
+      TestModel.prototype[method] = function() {
+        if (this.shouldThrow) {
+          return Q.reject(new Error(`${method} throw`));
+        } else {
+          return Q.resolve(`${method} result`);
+        }
+      };
+    });
+
+    this.TestModel = TestModel;
+  },
+};
+
+['_insert', '_remove', '_update', '_get'].forEach((method) => {
+  test['events'][method] = {
+    'entry': function*() {
+      let m = new (this.TestModel);
+
+      let spy = this.mocker.spy();
+
+      m.on(`before:${method}`, spy);
+
+      m[method](123);
+
+      spy.should.have.been.calledWith(123);
+    },
+    'exit - ok': function*() {
+      let m = new (this.TestModel);
+
+      let spy = this.mocker.spy();
+
+      m.on(`after:${method}`, spy);
+
+      let res = yield m[method](123);
+
+      res.should.eql(`${method} result`);
+
+      spy.should.have.been.calledWith('success', `${method} result`);
+    },
+    'exit - error': function*() {
+      let m = new (this.TestModel);
+      m.shouldThrow = true;
+
+      let spy = this.mocker.spy();
+
+      m.on(`after:${method}`, spy);
+
+      try {
+        yield m[method](123);
+        throw new Error('unexpected');
+      } catch (err) {
+        err.message.should.eql(`${method} throw`);
+      }
+
+      spy.should.have.been.calledWith('error');
+
+      _.get(spy.getCall(0), 'args.1').should.be.instanceof(Error);
+    },
+  };
+});
+
+
+
+
+
