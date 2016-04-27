@@ -8,7 +8,7 @@ whilst still providing helpful document handling.
 Features:
 
 * Fully pluggable - easy to add support for your NoSQL DB of choice
-* Add before and after event listeners for inserts, updates and removals
+* Listen to before and after events on internal asynchronous methods
 * Work with ODM-style documents or raw Mongo data - the choice is yours
 * Schema validation ([simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema)).
 
