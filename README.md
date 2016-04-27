@@ -23,7 +23,7 @@ $ npm install thinodium
 This package provides the core infrastructure. To actually access a particular 
 database you will need to additionally install one of the following adapters:
 
-* thinodium-rethink - RethinkDB
+* [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) - RethinkDB
 
 _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
@@ -32,7 +32,7 @@ _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
 The below examples assume that we're dealing with a RethinkDB database.
 
-
+_TODO: coming soon!_
 
 ## Building
 
