@@ -32,6 +32,8 @@ _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
 The below examples assume that we're dealing with a RethinkDB database.
 
+**Basic**
+
 Let's first create a database connection and get a model instance that will 
 allow us to work with the `User` table.
 
@@ -66,15 +68,78 @@ let user2 = yield model.get(user.id);
 console.log(user2.name); /* mark */
 ```
 
-The two available public methods are `get()` and `insert()`. These actually 
-call into "internal" methods which only deal with raw db data. These are 
+Both `get()` and `insert()` return `Thinodium.Document` instances. These internally call 
+through to the methods prefixed with `raw` - methods which you can also use 
+directly if you do not wish to deal with `Document`s. These are 
 documented in the [API docs](https://hiddentao.github.io/thinodium).
 
-We can add virtual fields to documents:
+**Document customization**
+
+We can add virtual fields and additional methods to `Document`s:
 
 ```js
+// create the model
+const model = thinodium.createModel('rethink', db, 'User', {
+  methods: {
+    padName: function(str) {
+      this.name += str;
+    } 
+  },
+  virtuals: {
+    fullName: {
+      get: function() {
+        return this.name + ' smith';
+      }
+    }
+  }
+});
+
+// initialise the model (this creates the db table and indexes)
+yield model.init();
+
+// insert a new user
+let user = yield model.insert({
+  name: 'john'
+});
+
+console.log(user2.fullName); /* mark smith */
+
+user.padName('test');
+
+console.log(user2.fullName); /* marktest smith */
 ```
 
+**Schema validation**
+
+Schema validation is performed by [simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema).
+
+```js
+// create the model
+const model = thinodium.createModel('rethink', db, 'User', {
+  schema: {
+    age: {
+      type: Number,
+      required: true,
+    },
+  }
+});
+
+// initialise the model (this creates the db table and indexes)
+yield model.init();
+
+// insert a new user
+let user1 = yield model.insert({ name: 'john', }); /* throws Error since age is missing */ 
+
+let user2 = yield model.insert({
+  name: 'john',
+  age: 23,
+});
+user2.age = 'test';
+
+yield user2.save();  /* throws Error since age must be a number */
+```
+
+Check out [the docs](https://hiddentao.github.io/thinodium) for more information.
 
 ## Building
 
