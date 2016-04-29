@@ -24,19 +24,20 @@ var test = utils.createTest(module);
 
 test['basic'] = {
   'construction': function*() {
-    let m = new Model(2);
+    let m = new Model(2, 'table');
 
     m.db.should.eql(2);
+    m.name.should.eql('table');
     expect(m.schema).to.be.undefined;
     m.pk.should.eql('id');
   },
   'with pk': function*() {
-    let m = new Model(2, { pk: 'test' });
+    let m = new Model(2, 'table', { pk: 'test' });
 
     m.pk.should.eql('test');
   },
   'with schema': function*() {
-    let m = new Model(2, { 
+    let m = new Model(2, 'table', { 
       schema: {
         name: {
           type: String,
@@ -132,7 +133,7 @@ test['wrap doc'] = {
     d.name.should.eql('john');
   },
   'adds methods': function*() {
-    let m = new Model(null, {
+    let m = new Model(null, 'table', {
       methods: {
         getName: function() {
           return this.name;
@@ -148,7 +149,7 @@ test['wrap doc'] = {
     d.getName().should.eql('john');
   },
   'adds virtuals': function*() {
-    let m = new Model(null, {
+    let m = new Model(null, 'table', {
       virtuals: {
         nickname: {
           get: function() {
