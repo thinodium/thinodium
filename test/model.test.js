@@ -54,11 +54,11 @@ test['basic'] = {
 test['get'] = function*() {
   let m = new Model(2);
 
-  this.mocker.stub(m, 'wrapDoc', (rawDoc) => {
+  this.mocker.stub(m, 'wrapRaw', (rawDoc) => {
     return rawDoc ? '[' + rawDoc + ']' : 'none';
   });
 
-  this.mocker.stub(m, '_get', (id) => {
+  this.mocker.stub(m, 'rawGet', (id) => {
     return Q.resolve(0 < id ?  'test'  : null);
   });
 
@@ -71,11 +71,11 @@ test['get'] = function*() {
 test['insert'] = function*() {
   let m = new Model(2);
 
-  this.mocker.stub(m, 'wrapDoc', (rawDoc) => {
+  this.mocker.stub(m, 'wrapRaw', (rawDoc) => {
     return rawDoc ? '[' + rawDoc + ']' : 'none';
   });
 
-  this.mocker.stub(m, '_insert', (attrs) => {
+  this.mocker.stub(m, 'rawInsert', (attrs) => {
     return Q.resolve(234);
   });
 
@@ -83,7 +83,7 @@ test['insert'] = function*() {
     name: 'john'
   }).should.eventually.eql('[234]');
 
-  m._insert.should.have.been.calledWith({
+  m.rawInsert.should.have.been.calledWith({
     name: 'john'
   });
 };
@@ -97,37 +97,37 @@ test['fixture methods'] = {
   'init': function*() {
     this.m.init().should.eventually.be.undefined;
   },
-  '_qry': function*() {
+  'rawQry': function*() {
     expect(() => {
-      this.m._qry();
+      this.m.rawQry();
     }).to.throw('Not yet implemented');
   },
-  '_get': function*() {
-    this.m._get().should.eventually.be.rejectedWith('Not yet implemented')
+  'rawGet': function*() {
+    this.m.rawGet().should.eventually.be.rejectedWith('Not yet implemented')
   },
-  '_update': function*() {
-    this.m._update().should.eventually.be.rejectedWith('Not yet implemented')
+  'rawUpdate': function*() {
+    this.m.rawUpdate().should.eventually.be.rejectedWith('Not yet implemented')
   },
-  '_insert': function*() {
-    this.m._insert().should.eventually.be.rejectedWith('Not yet implemented')
+  'rawInsert': function*() {
+    this.m.rawInsert().should.eventually.be.rejectedWith('Not yet implemented')
   },
-  '_remove': function*() {
-    this.m._remove().should.eventually.be.rejectedWith('Not yet implemented')
+  'rawRemove': function*() {
+    this.m.rawRemove().should.eventually.be.rejectedWith('Not yet implemented')
   },
 };
 
 
 
-test['_wrap'] = function*() {
+test['wrapRaw'] = function*() {
   let m = new Model();
 
-  this.mocker.stub(m, 'wrapDoc', (doc) => {
+  this.mocker.stub(m, '_wrapRawDoc', (doc) => {
     return '[' + doc + ']';
   });
 
-  expect(m._wrap(null)).to.eql(null);
-  m._wrap(2).should.eql('[2]');
-  m._wrap([2,null,3,undefined,5]).should.eql([
+  expect(m.wrapRaw(null)).to.eql(null);
+  m.wrapRaw(2).should.eql('[2]');
+  m.wrapRaw([2,null,3,undefined,5]).should.eql([
     '[2]', null, '[3]', undefined, '[5]',
   ]);
 };
@@ -139,13 +139,13 @@ test['wrap doc'] = {
   'empty': function*() {
     let m = new Model();
 
-    expect(m.wrapDoc()).to.be.undefined;
-    expect(m.wrapDoc(null)).to.be.null;
+    expect(m._wrapRawDoc()).to.be.undefined;
+    expect(m._wrapRawDoc(null)).to.be.null;
   },
   'doc': function*() {
     let m = new Model();
 
-    let d = m.wrapDoc({
+    let d = m._wrapRawDoc({
       id: 123,
       name: 'john',
     });
@@ -163,7 +163,7 @@ test['wrap doc'] = {
       }
     });
 
-    let d = m.wrapDoc({
+    let d = m._wrapRawDoc({
       id: 123,
       name: 'john',
     });
@@ -181,7 +181,7 @@ test['wrap doc'] = {
       }
     });
 
-    let d = m.wrapDoc({
+    let d = m._wrapRawDoc({
       id: 123,
       name: 'john',
     });
@@ -197,7 +197,7 @@ test['events'] = {
   beforeEach: function*() {
     class TestModel extends Model {}
 
-    ['_insert', '_remove', '_update', '_get'].forEach((method) => {
+    ['rawInsert', 'rawRemove', 'rawUpdate', 'rawGet'].forEach((method) => {
       TestModel.prototype[method] = function() {
         if (this.shouldThrow) {
           return Q.reject(new Error(`${method} throw`));
@@ -211,7 +211,7 @@ test['events'] = {
   },
 };
 
-['_insert', '_remove', '_update', '_get'].forEach((method) => {
+['rawInsert', 'rawRemove', 'rawUpdate', 'rawGet'].forEach((method) => {
   test['events'][method] = {
     'entry': function*() {
       let m = new (this.TestModel);

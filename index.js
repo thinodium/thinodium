@@ -14,7 +14,7 @@ class Thinodium {
     this._adapters[typeName] = moduleNameOrObject;    
   }
 
-  createModel (typeName, db, tableName, cfg) {
+  create (typeName, db, tableName, cfg) {
     let Model = this._adapters[typeName].Model;
 
     return new Model(db, tableName, cfg);

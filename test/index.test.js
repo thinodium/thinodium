@@ -43,7 +43,7 @@ test['adapter'] = {
       Model: Model,
     });
 
-    let m = t.createModel('test', 23, 'table2');
+    let m = t.create('test', 23, 'table2');
 
     m.should.be.instanceof(Model);
     m.args.should.eql([23, 'table2', undefined]);

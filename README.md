@@ -7,9 +7,9 @@ whilst still providing helpful document handling.
 
 Features:
 
+* Add virtual fields to documents
 * Fully pluggable - easy to add support for your NoSQL DB of choice
 * Listen to before and after events on internal asynchronous methods
-* Work with ODM-style documents or raw Mongo data - the choice is yours
 * Schema validation ([simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema)).
 
 ## Installation
@@ -48,11 +48,32 @@ thinodium.loadAdapter('rethink', 'thinodium-rethinkdb');
 // create the model
 const model = thinodium.createModel('rethink', db, 'User');
 
-// load user with id 123
-let user = yield model.get(123);
+// initialise the model (this creates the db table and indexes)
+yield model.init();
+
+// insert a new user
+let user = yield model.insert({
+  name: 'john'
+});
+
+// change the name
+user.name = 'mark';
+yield user.save();
+
+// load user with id
+let user2 = yield model.get(user.id);
+
+console.log(user2.name); /* mark */
 ```
 
+The two available public methods are `get()` and `insert()`. These actually 
+call into "internal" methods which only deal with raw db data. These are 
+documented in the [API docs](https://hiddentao.github.io/thinodium).
 
+We can add virtual fields to documents:
+
+```js
+```
 
 
 ## Building

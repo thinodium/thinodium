@@ -186,7 +186,7 @@ test['save'] = {
   beforeEach: function*() {
     var m = this.m = {
       pk: '_id',
-      _update: this.mocker.spy(function() {
+      rawUpdate: this.mocker.spy(function() {
         return Q.resolve();
       }),
     }
@@ -208,8 +208,8 @@ test['save'] = {
 
     yield doc.save();
 
-    this.m._update.should.have.been.calledOnce;
-    this.m._update.should.have.been.calledWithExactly(doc.id, {
+    this.m.rawUpdate.should.have.been.calledOnce;
+    this.m.rawUpdate.should.have.been.calledWithExactly(doc.id, {
       dead: 12,
       farmer: true,
     }, this.d);
@@ -245,7 +245,7 @@ test['remove'] = {
   beforeEach: function*() {
     var m = this.m = {
       pk: '_id',
-      _remove: this.mocker.spy(function() {
+      rawRemove: this.mocker.spy(function() {
         return Q.resolve();
       }),
     }
@@ -264,8 +264,8 @@ test['remove'] = {
 
     yield doc.remove();
 
-    this.m._remove.should.have.been.calledOnce;
-    this.m._remove.should.have.been.calledWithExactly(doc.id);
+    this.m.rawRemove.should.have.been.calledOnce;
+    this.m.rawRemove.should.have.been.calledWithExactly(doc.id);
   },
 };
 
@@ -277,7 +277,7 @@ test['reload'] = {
   beforeEach: function*() {
     var m = this.m = {
       pk: '_id',
-      _get: this.mocker.spy(function() {
+      rawGet: this.mocker.spy(function() {
         return Q.resolve({
           _id: 456,
           name: 'sam',
@@ -302,8 +302,8 @@ test['reload'] = {
 
     yield doc.reload();
 
-    this.m._get.should.have.been.calledOnce;
-    this.m._get.should.have.been.calledWithExactly(doc.id);
+    this.m.rawGet.should.have.been.calledOnce;
+    this.m.rawGet.should.have.been.calledWithExactly(doc.id);
   },
 
   'reloads data': function*() {
