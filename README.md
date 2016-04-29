@@ -32,7 +32,28 @@ _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
 The below examples assume that we're dealing with a RethinkDB database.
 
-_TODO: coming soon!_
+Let's first create a database connection and get a model instance that will 
+allow us to work with the `User` table.
+
+```js
+// db connection
+const db = require('rethinkdbdash')();
+
+// thinodium instance
+const thinodium = new (require('thinodium'));
+
+// let's load in the thinodium-rethinkdb module as the adapter
+thinodium.loadAdapter('rethink', 'thinodium-rethinkdb');
+
+// create the model
+const model = thinodium.createModel('rethink', db, 'User');
+
+// load user with id 123
+let user = yield model.get(123);
+```
+
+
+
 
 ## Building
 

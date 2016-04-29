@@ -68,6 +68,28 @@ test['get'] = function*() {
 
 
 
+test['insert'] = function*() {
+  let m = new Model(2);
+
+  this.mocker.stub(m, 'wrapDoc', (rawDoc) => {
+    return rawDoc ? '[' + rawDoc + ']' : 'none';
+  });
+
+  this.mocker.stub(m, '_insert', (attrs) => {
+    return Q.resolve(234);
+  });
+
+  m.insert({
+    name: 'john'
+  }).should.eventually.eql('[234]');
+
+  m._insert.should.have.been.calledWith({
+    name: 'john'
+  });
+};
+
+
+
 test['fixture methods'] = {
   beforeEach: function*() {
     this.m = new Model(2);
