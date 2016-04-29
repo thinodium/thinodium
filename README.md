@@ -7,6 +7,7 @@ whilst still providing helpful document handling.
 
 Features:
 
+* Allows you to handle connections yourself
 * Add virtual fields to documents
 * Fully pluggable - easy to add support for your NoSQL DB of choice
 * Listen to before and after events on internal asynchronous methods
