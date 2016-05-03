@@ -11,39 +11,10 @@ exports.connect = function(adapter, options) {
 
   let db = new (ADAPTERS[adapter].Database);
 
-  db.connect(options)
-
-  return ADAPTERS[adapter].connect(options);
+  return db.connect(options);
 }
 
 
-
-
-
-
-class Thinodium {
-  constructor() {
-    this.
-  }
-
-  loadAdapter (typeName, moduleNameOrObject) {
-    if (typeof moduleNameOrObject === 'string') {
-      moduleNameOrObject = require(moduleNameOrObject);
-    }
-
-    this.ADAPTERS[typeName] = moduleNameOrObject;    
-  }
-
-  create (typeName, db, tableName, cfg) {
-    let Model = this.ADAPTERS[typeName].Model;
-
-    return new Model(db, tableName, cfg);
-  }
-}
-
-
-Thinodium.Model = require('./lib/model');
-Thinodium.Document = require('./lib/document');
-
-
-module.exports = Thinodium;
+exports.Database = require('./lib/db');
+exports.Model = require('./lib/model');
+exports.Document = require('./lib/document');

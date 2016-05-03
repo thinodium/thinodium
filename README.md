@@ -74,13 +74,13 @@ We can add virtual fields and additional methods to `Document`s:
 
 ```js
 // create the model
-const model = db.createModel('User', {
-  methods: {
+const model = yield db.model('User', {
+  docMethods: {
     padName: function(str) {
       this.name += str;
     } 
   },
-  virtuals: {
+  docVirtuals: {
     fullName: {
       get: function() {
         return this.name + ' smith';
@@ -88,9 +88,6 @@ const model = db.createModel('User', {
     }
   }
 });
-
-// initialise the model (this creates the db table and indexes)
-yield model.init();
 
 // insert a new user
 let user = yield model.insert({
@@ -110,7 +107,7 @@ Schema validation is performed by [simple-nosql-schema](https://github.com/hidde
 
 ```js
 // create the model
-const model = thinodium.createModel('rethink', db, 'User', {
+const model = yield db.model('User', {
   schema: {
     age: {
       type: Number,
@@ -118,9 +115,6 @@ const model = thinodium.createModel('rethink', db, 'User', {
     },
   }
 });
-
-// initialise the model (this creates the db table and indexes)
-yield model.init();
 
 // insert a new user
 let user1 = yield model.insert({ name: 'john', }); /* throws Error since age is missing */ 
