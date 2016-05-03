@@ -28,22 +28,20 @@
     "url": "https://github.com/hiddentao/thinodium/issues"
   },
   "devDependencies": {
-    "chai": "^1.10.0",
     "co-mocha": "^1.1.0",
     "gulp": "~3.8.1",
     "gulp-mocha": "~0.4.1",
     "mocha": "^2.1.0",
     "sinon": "^1.12.2",
-    "sinon-chai": "^2.6.0"
+    "chai": "^3.5.0",
+    "chai-as-promised": "^5.3.0",
+    "sinon-chai": "^2.8.0"
   },
   "homepage": "https://github.com/hiddentao/thinodium",
   "dependencies": {
     "bluebird": "^3.3.5",
-    "chai": "^3.5.0",
-    "chai-as-promised": "^5.3.0",
     "eventemitter3": "^1.2.0",
     "lodash": "^4.11.1",
-    "simple-nosql-schema": "^1.0.0",
-    "sinon-chai": "^2.8.0"
+    "simple-nosql-schema": "^1.0.0"
   }
 }
