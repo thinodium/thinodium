@@ -162,8 +162,8 @@ Check out the [API docs](https://hiddentao.github.io/thinodium) for information 
 
 ## Creating an Adapter
 
-An adapter simply has to provide a `Database` class which extends the Thinodium 
-base class and overrides the necessary internal methods:
+An adapter has to extend the base `Database` and `Model` classes and 
+override the necessary internal methods:
 
 ```js
 "use strict";
@@ -189,6 +189,8 @@ class Database extends thinodium.Database {
     return new Model(connection, name, config);
   }
 }
+
+
 
 class Model extends thinodium.Model {
   rawQry() {
@@ -223,6 +225,10 @@ class Model extends thinodium.Model {
     });
   }
 }
+
+
+module.exports = Database;
+
 
 ```
 
