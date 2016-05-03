@@ -1,54 +1,28 @@
 "use strict";
 
-var _ = require('lodash'),
+const _ = require('lodash'),
+  path = require('path'),
   Q = require('bluebird');
 
-
-var utils = require('./utils'),
+const utils = require('./utils'),
   assert = utils.assert,
   expect = utils.expect,
   should = utils.should,
   sinon = utils.sinon;
 
-var Thinodium = utils.Thinodium;
+const TestAdapter = require('./testAdapter');
 
-var test = utils.createTest(module);
+const Thinodium = utils.Thinodium;
+
+const test = utils.createTest(module);
 
 
 
-test['adapter'] = {
-  'load adapter as object': function*() {
-    let t = new Thinodium();
+test['connect'] = {
+  'relative path to adapter': function*() {
+    const db = yield Thinodium.connect(path.join(__dirname, 'testAdapter'));
 
-    class Model {
-      constructor() {
-        this.args = _.toArray(arguments);
-      }
-    }
-
-    t.loadAdapter('test', {
-      Model: Model,
-    });
-  },
-  'use adapter': function*() {
-    let t = new Thinodium();
-
-    class Model {
-      constructor() {
-        this.args = _.toArray(arguments);
-      }
-    }
-
-    t.loadAdapter('test', {
-      Model: Model,
-    });
-
-    let m = t.create('test', 23, 'table2');
-
-    m.should.be.instanceof(Model);
-    m.args.should.eql([23, 'table2', undefined]);
+    db.should.be.instanceof(TestAdapter.Database);
   }
 };
-
-
 

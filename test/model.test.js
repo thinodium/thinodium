@@ -156,7 +156,7 @@ test['wrap doc'] = {
   },
   'adds methods': function*() {
     let m = new Model(null, 'table', {
-      methods: {
+      docMethods: {
         getName: function() {
           return this.name;
         }
@@ -172,7 +172,7 @@ test['wrap doc'] = {
   },
   'adds virtuals': function*() {
     let m = new Model(null, 'table', {
-      virtuals: {
+      docVirtuals: {
         nickname: {
           get: function() {
             return `lil' ${this.name}`;

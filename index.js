@@ -11,7 +11,10 @@ exports.connect = function(adapter, options) {
 
   let db = new (ADAPTERS[adapter].Database);
 
-  return db.connect(options);
+  return db.connect(options)
+    .then(() => {
+      return db;
+    });
 }
 
 
