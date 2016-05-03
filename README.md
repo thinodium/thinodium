@@ -39,20 +39,14 @@ Let's first create a database connection and get a model instance that will
 allow us to work with the `User` table.
 
 ```js
-// db connection
-const db = require('rethinkdbdash')();
-
 // thinodium instance
-const thinodium = new (require('thinodium'));
+const thinodium = require('thinodium');
 
-// let's load in the thinodium-rethinkdb module as the adapter
-thinodium.loadAdapter('rethink', 'thinodium-rethinkdb');
+// create the connection
+const db = yield thinodium.connect('rethinkdb');
 
 // create the model
-const model = thinodium.createModel('rethink', db, 'User');
-
-// initialise the model (this creates the db table and indexes)
-yield model.init();
+const model = yield db.model('User');
 
 // insert a new user
 let user = yield model.insert({
@@ -80,7 +74,7 @@ We can add virtual fields and additional methods to `Document`s:
 
 ```js
 // create the model
-const model = thinodium.createModel('rethink', db, 'User', {
+const model = db.createModel('User', {
   methods: {
     padName: function(str) {
       this.name += str;

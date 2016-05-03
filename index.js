@@ -1,9 +1,29 @@
 "use strict";
 
+const ADAPTERS = {};
+
+exports.connect = function(adapter, options) {
+  try {
+    ADAPTERS[adapter] = require(`thinodium-${adapter}`);    
+  } catch (err) {
+    ADAPTERS[adapter] = require(adapter);
+  }
+
+  let db = new (ADAPTERS[adapter].Database);
+
+  db.connect(options)
+
+  return ADAPTERS[adapter].connect(options);
+}
+
+
+
+
+
 
 class Thinodium {
   constructor() {
-    this._adapters = {};
+    this.
   }
 
   loadAdapter (typeName, moduleNameOrObject) {
@@ -11,11 +31,11 @@ class Thinodium {
       moduleNameOrObject = require(moduleNameOrObject);
     }
 
-    this._adapters[typeName] = moduleNameOrObject;    
+    this.ADAPTERS[typeName] = moduleNameOrObject;    
   }
 
   create (typeName, db, tableName, cfg) {
-    let Model = this._adapters[typeName].Model;
+    let Model = this.ADAPTERS[typeName].Model;
 
     return new Model(db, tableName, cfg);
   }
