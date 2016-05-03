@@ -29,23 +29,44 @@ database you will need to additionally install one of the following adapters:
 _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
 
-## Examples
+## Basic usage
 
-The below examples assume that we're dealing with a RethinkDB database.
-
-**Basic**
-
-Let's first create a database connection and get a model instance that will 
-allow us to work with the `User` table.
+Let's first create a database connection:
 
 ```js
 // thinodium instance
 const thinodium = require('thinodium');
 
 // create the connection
-const db = yield thinodium.connect('rethinkdb');
+const db = yield thinodium.connect('rethinkdb', {
+  db: 'mydb',
+});
+```
 
-// create the model
+Thinodium will try to load an NPM module called `thinodium-rethinkdb` (which 
+is our intention in this example). If not 
+available it will try to load a module called `rethinkdb`. Once loaded it will 
+instantiate a database connection through that module, passing in the second 
+parameter to `connect()`.
+
+If we wished to add a custom adapter but not as an NPM module we could simply 
+provide its path to `connect()`:
+
+```js
+// connect using custom adatper
+const db = yield thinodium.connect('path/to/custom/adapter', {
+  db: 'mydb',
+});
+
+```
+
+**Models**
+
+Once we have our database connection setup we can access models (i.e. tables) 
+within the database:
+
+```js
+// get the model
 const model = yield db.model('User');
 
 // insert a new user
@@ -63,14 +84,15 @@ let user2 = yield model.get(user.id);
 console.log(user2.name); /* mark */
 ```
 
-Both `get()` and `insert()` return `Thinodium.Document` instances. These internally call 
-through to the methods prefixed with `raw` - methods which you can also use 
-directly if you do not wish to deal with `Document`s. These are 
-documented in the [API docs](https://hiddentao.github.io/thinodium).
+Both `get()` and `insert()` return `Thinodium.Document` instances. 
+These internally call through to the methods prefixed with `raw` - methods 
+which you can also use directly if you do not wish to deal with `Document`s. 
+These are documented in the [API docs](https://hiddentao.github.io/thinodium).
 
 **Document customization**
 
-We can add virtual fields and additional methods to `Document`s:
+Model documents (each representing a row in the table) can be customized. We 
+can add virtual fields and additional methods:
 
 ```js
 // create the model
@@ -103,11 +125,12 @@ console.log(user2.fullName); /* marktest smith */
 
 **Schema validation**
 
-Schema validation is performed by [simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema).
+Schema validation is performed by [simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema), and is used if a schema is provided in the initial model config:
 
 ```js
 // create the model
 const model = yield db.model('User', {
+  // tell Thinodium to validate all updates and inserts against the given schema
   schema: {
     age: {
       type: Number,
@@ -128,7 +151,82 @@ user2.age = 'test';
 yield user2.save();  /* throws Error since age must be a number */
 ```
 
-Check out [the docs](https://hiddentao.github.io/thinodium) for more information.
+Note that schema validation is partial. If the insert or update contains a 
+key that is not mentioned within the schema then that key gets passed through 
+without any checks. This allows for flexibility - you only need to vaildate 
+the parts of a model's schema you're interested in.
+
+## API 
+
+Check out the [API docs](https://hiddentao.github.io/thinodium) for information on supported methods.
+
+## Creating an Adapter
+
+An adapter simply has to provide a `Database` class which extends the Thinodium 
+base class and overrides the necessary internal methods:
+
+```js
+"use strict";
+
+const thinodium = require('thinodium');
+
+class Database extends thinodium.Database {
+  _connect (options) {
+    return new Promise((resolve, reject) => {
+      // do what's needed for connection here and save into "connection" var
+      resolve(connection);      
+    });
+  }
+
+  _disconnect (connection) {
+    return new Promise((resolve, reject) => {
+      // disconnect connection
+      resolve();
+    });
+  }
+
+  _model (connection, name, config) {
+    return new Model(connection, name, config);
+  }
+}
+
+class Model extends thinodium.Model {
+  rawQry() {
+    // return object for doing raw querying
+  }
+
+  rawGet (id) {
+    return new Promise((resolve, reject) => {
+      // fetch doc with given id
+      resolve(doc);      
+    });
+  }
+
+  rawInsert (attrs) {
+    return new Promise((resolve, reject) => {
+      // insert doc
+      resolve(doc);      
+    });
+  }
+
+  rawUpdate (id, changes, document) {
+    return new Promise((resolve, reject) => {
+      // update doc
+      resolve();
+    });
+  }
+
+  rawRemove (id) {
+    return new Promise((resolve, reject) => {
+      // remove doc with id
+      resolve();      
+    });
+  }
+}
+
+```
+
+
 
 ## Building
 
