@@ -42,7 +42,7 @@ test['connect'] = {
     yield db.connect('blah');
 
     db._connect.should.have.been.calledWith('blah');
-    db._connection.should.eql(123);    
+    db.isConnected.should.be.true;
   },
   'fails if already connected': function*() {
     let db = this.db;
@@ -72,7 +72,7 @@ test['disconnect'] = {
     yield db.disconnect();
 
     db._disconnect.should.have.been.calledWith(123);
-    expect(db._connection).to.be.null;
+    db.isConnected.should.be.false;
   },
   'fails if not connected': function*() {
     let db = this.db;
