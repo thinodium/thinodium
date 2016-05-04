@@ -228,8 +228,6 @@ class Model extends thinodium.Model {
 
 
 module.exports = Database;
-
-
 ```
 
 
