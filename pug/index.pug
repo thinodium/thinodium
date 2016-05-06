@@ -1,0 +1,823 @@
+include _mixins
+
+doctype html
+html
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible", content="chrome=1")
+    meta(name="keywords", content="javascript,nodejs,odm,mongodb,github,es6")
+    meta(name="description", content="Node.js ODM for MongoDB using ES6 generators.")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0")
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style", content="default")
+    title Thinodium
+    link(href='https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic', rel='stylesheet', type='text/css')
+    link(href='https://fonts.googleapis.com/css?family=Bree+Serif', rel='stylesheet', type='text/css')
+    link(href="https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css", rel="stylesheet")
+    link(href="css/prism.css", rel="stylesheet", type='text/css')
+    link(href="css/style.css", rel="stylesheet", type='text/css')
+    script(src="js/scale.fix.js")
+  body
+    header
+      h2 Thinodium
+      nav
+    main#top
+      h1
+        span Thinodium
+        small Light-weight, "thin" Object Document Mapper (ODM) for Node.js.
+
+      .links
+        a.github(href="https://github.com/hiddentao/thinodium", title="Github")
+          i.fa.fa-github
+          span Github
+        a.twitter(href="https://twitter.com/hiddentao", title="Twitter")
+          i.fa.fa-twitter
+          span Twitter
+
+      +code('bash').
+        $ npm install --save thinodium
+
+      section#intro
+        :marked
+          **Thinodium** wraps your database tables and data rows in an easy-to-use 
+          yet flexible API.
+
+          Overview:
+
+          * ES5 and ES6-friendly - uses Promises, no callbacks.
+          * Use [documents](#documents) or [raw data](#raw), your choice.
+          * Add [schema validation](#schema) and [custom methods](#customization).
+          * Add [hooks](#hooks) for further processing.
+          * [Adapter](#adapters) architecture - use your db of choice.
+          * Clean, object-oriented [API](#api).
+
+          What sets Thinodium apart from other _heavier_ abstractions is that 
+          it does not dictate how inter-table relationships are represented, 
+          leaving you the freedom to do what's optimal for your db.
+
+          To use Thinodium within your code:
+
+        +code('javascript').
+          "use strict";
+
+          const Thinodium = require('thinodium');
+
+      section#connecting
+        :marked
+          ## Connecting
+
+          In order to connect to a database Thinodium requires you 
+          to install an [available adapter](https://www.npmjs.com/search?q=thinodium) 
+          for that database type. We're going to use the RethinkDB 
+          adapter for all the examples going forward.
+
+        +code('bash').
+          $ npm install thinodium-rethinkdb
+
+        :marked
+          Now we can connect:
+
+        +code('javascript').
+          const db = yield Thinodium.connect('rethinkdb', {
+            db: 'mydb',
+          }); 
+
+        :marked
+          The returned object `db` is an instance of `Thinodium.Database`.
+
+      section#querying
+        :marked
+          ## Querying
+
+          Imagine we have a simple table - **students** - with the 
+          following data:
+
+        table
+          thead
+            tr
+              th id
+              th name
+              th age
+              th sports
+          tr
+            td 1
+            td Tom
+            td 19      
+            td ['football', 'tennis']      
+          tr
+            td 2
+            td Jim
+            td 22            
+            td ['running']      
+          tr
+            td 3
+            td Abe
+            td 98            
+            td []      
+          tr
+            td 4
+            td Candy
+            td 5            
+            td ['hockey', 'netball']      
+          tr
+            td 5
+            td Ram
+            td 27            
+            td ['climbing']      
+          tr
+            td 6
+            td Drew
+            td 41            
+            td ['hockey']      
+          tr
+            td 7
+            td Jeff
+            td 31            
+            td ['tennis']      
+
+        :marked
+          To fetch a student:
+
+        +code('javascript').
+          const model = yield db.model('students');
+
+          console.log( model instanceof Thinodium.Model ); /* true */
+
+          // we pass in the primary key ("id" by default for RethinkDB)
+          let candy = yield model.get(4);
+
+          console.log( candy instanceof Thinodium.Document ); /* true */
+
+          console.log(candy.toJSON());
+
+          /*
+            {
+              id: 1,
+              name: "Candy",
+              age: 5,
+              sports: ['hockey', 'netball']
+            }
+          */
+         
+      section#documents
+        :marked
+          ### Documents 
+
+          Each returned result is an instance of `Thinodium.Document`. Documents 
+          encapsulate the raw data and can be enumerated just like plain 
+          objects.
+
+        +code('javascript').
+          let candy = yield model.get(4);
+
+          // output document keys
+          console.log( Object.keys(result) );
+
+          /*
+            [ 'id', 'name', 'age' ]
+          */
+         
+        :marked
+          Documents automatically keep track of which 
+          properties get changed and only update those properties in the 
+          database when you call `save()`.
+
+        +code('javascript').
+          let candy = yield model.get(4);
+
+          candy.name = 'Jimbo';
+
+          yield candy.save();
+
+          /* We have renamed Candy to Jimbo */
+         
+        :marked
+          Most databases allow for `Array` or `Object` fields. If you modify 
+          the contents of such a field you will need to tell Thinodium that 
+          the field got modified (as it cannot detect this by itself):
+
+        +code('javascript').
+          let candy = yield model.get(4);
+
+          candy.sports.push('mma');
+
+          // we need to tell Thinodium that the 'sports' key got updated
+          result.markChanged('sports');
+
+          yield result.save();
+           
+      section#raw
+        :marked
+          ### Raw data
+
+          To deal directly with raw db data and not use 
+          `Thinodium.Document` instances you can use the `raw` methods:
+
+        +code('javascript').
+          let candy = yield model.rawGet(4);
+
+          console.log( candy instanceof Thinodium.Document ); /* false */
+
+          console.log( candy );
+
+          /*
+            {
+              id: 4,
+              name: 'Candy',
+              age: 5,
+            }
+          */
+
+        :marked
+          The most powerful raw method is `rawQry()`. This returns a querying 
+          object which should allow you to execute any query supported by underlying database engine interface:
+
+        +code('javascript').
+          // The Thinodium RethinDB adapter uses rethinkdbdash, which pretty much gives us all the native RethinkDB query methods.
+
+          // get all tennis players, and only return their names
+          let players = yield model.rawQry().filter(function(row) {
+            return row('sports').contains('tennis');
+          }).pluck('name').run();
+
+          console.log( players );
+
+          /*
+            [
+              {
+                name: 'Tom'
+              },
+              {
+                name: 'Jeff'
+              }
+            ]
+          */
+
+        :marked
+          Raw querying methods always return raw data. But you can wrap the returned data in `Document` instances using the `wrapRaw()` method:
+
+        +code('javascript').
+          // get all tennis players, and only return their names
+          let players = yield model.rawQry().filter(function(row) {
+            return row('sports').contains('tennis');
+          }).run();
+
+          players = model.wrapRaw(players);
+
+          console.log( players[0] instanceof Thinodium.Document ); /* true */
+
+
+      section#inserting
+        :marked
+          ## Inserting
+
+          Inserting data is done via the `Model` instance:
+
+        +code('javascript').
+          const model = yield db.model('students');
+
+          let amanda = yield model.insert({
+            name: 'Amanda',
+            age: 76,
+            sports: []
+          });
+
+          console.log( amanda instanceof Thinodium.Document ); /* true */
+
+          console.log( amanda.toJSON() );
+
+          /*
+            {
+              id: // auto-generated id,
+              name: 'Amanda',
+              age: 76,
+              sports: [],
+            }  
+          */
+         
+        :marked
+          Raw insertion mode is also supported:
+
+        +code('javascript').
+          let amanda = yield model.rawInsert({
+            name: 'Amanda',
+            age: 76,
+            sports: []
+          });
+
+          console.log( amanda instanceof Thinodium.Document ); /* false */
+
+          console.log( amanda );
+
+          /*
+            {
+              id: // auto-generated id,
+              name: 'Amanda',
+              age: 76,
+              sports: [],
+            }  
+          */
+
+
+      section#updating
+        :marked
+          ## Updating
+
+          Changes made to a `Thinodium.Document` can be saved:
+
+        +code('javascript').
+          let candy = yield model.get(4);
+
+          candy.name = 'Jimbo';
+          candy.sports = ['mma'];
+
+          yield candy.save();
+
+        :marked
+          Internally this method calls through to the `rawUpdate()` method:
+
+        +code('javascript').
+          // this does the same as the previous example
+          yield model.rawUpdate(4, {
+            name: 'Jimbo',
+            sports: ['mma']
+          });
+
+
+      section#removing
+        :marked
+          ## Removing
+
+          Removing a document:
+
+        +code('javascript').
+          let candy = yield model.get(4);
+
+          yield candy.remove();
+
+        :marked
+          Internally this method calls through to `rawRemove()`:
+
+        +code('javascript').
+          // does the same as previous example
+          yield model.remove(4);
+
+      section#customization
+        :marked
+          ## Customization
+
+          Thinodium is a light-weight ODM, so out of the box it only 
+          gives you the bare essentials, such as `get()` and 
+          `insert()` for models.
+
+          However you can easily extend both `Thinodium.Model` and 
+          `Thinodium.Document` instances with custom methods and fields.
+
+      section#model_methods
+        :marked
+          ### Model methods
+
+        +code('javascript').
+          const model = yield db.model('students', {
+            modelMethods: {
+              /**
+               * Get students who play given sport.
+               * @param {String} sport The sport.
+               * @return {Promise} which resolves to array of Documents.
+               */
+              getStudentsWhoPlay: function(sport) {
+                return this.rawQry().filter(function(row) {
+                  return row('sports').contains(sport);
+                })
+                  .run()
+                  .then((results) => {
+                    return this.wrapRaw(results);
+                  });
+              },
+            }
+          });
+
+          let students = yield model.getStudentsWhoPlay('tennis');
+
+          console.log( students.length ); /* 2 */
+
+          console.log( students[0] instanceof Thinodium.Document ); /* true */
+
+        :marked
+          It is highly recommended that your custom methods return
+          `Promise` objects and that the resolved result is wrapped in 
+          `Document` instances, as shown above.
+
+      section#doc_methods
+        :marked
+          ### Document methods
+
+        +code('javascript').
+          const model = yield db.model('students', {
+            docMethods: {
+              /**
+               * Add given sport unless already present, and save.
+               * @return {Promise} resolves once done.
+               */
+              addSport: function(sport) {
+                if (!this.sports.contains(sport)) {
+                  this.sports.push(sport);
+                  this.markChanged('sports');
+                  return this.save();
+                } else {
+                  return Promise.resolve();
+                }
+              }
+            }
+          });
+
+          let jeff = yield model.get(7);
+
+          yield jeff.addSport('tennis');  /* does nothing */
+          yield jeff.addSport('mma'); /* adds mma */
+
+
+      section#virtual_fields
+        :marked
+          ### Virtual fields
+
+          Virtual fields work like normal `Thinodium.Document` fields, 
+          except that their value is actually a getter function and they 
+          are usually read-only. And they do not get saved to the database.
+
+        +code('javascript').
+          const model = yield db.model('students', {
+            docVirtuals: {
+              reverseName: {
+                get: function() {
+                  let name = this.name, reversed = '';
+
+                  for (let i = name.length - 1; 
+                      i >= 0; 
+                      reversed += nam[i--]);
+                  
+                  return reversed;
+                }
+              }
+            }
+          });
+
+          let jeff = yield model.get(7);
+
+          console.log( jeff.reverseName ); /* ffej */
+
+          console.log( jeff.toJSON );
+
+          /*
+            { 
+              id: 7,
+              name: 'Jeff',
+              age: 31,
+              sports: ['tennis'],
+              reverseName: 'jjef'
+            }
+           */
+
+          jeff.reverseName = 'test'; /* throws Error */
+
+        :marked
+          Virtual fields do not have to be read-only:
+
+        +code('javascript').
+          const reverseStr = function(str) {
+            let reversed = '';
+
+            for (let i = str.length - 1; 
+                i >= 0; 
+                reversed += str[i--]);
+            
+            return reversed;
+          }
+
+          const model = yield db.model('students', {
+            docVirtuals: {
+              reverseName: {
+                get: function() {
+                  return reverseStr(this.name);
+                },
+                set: function(val) {
+                  this.name = reverseStr(val);
+                }
+              }
+            }
+          });
+
+          let jeff = yield model.get(7);
+
+          jeff.reverseName = 'ruhtra';
+
+          console.log( jeff.name ); /* 'arthur' */
+
+
+      section#schema
+        :marked
+          ## Schema validation
+
+          Thinodium can optionally validate the structure of your document against a 
+          schema you provide. The schema specified according what is supported 
+          by the [simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema) 
+          module.
+
+        +code('javascript').
+          const model = yield db.model('students', {
+            schema: {
+              name: {
+                type: String
+              },
+              age: {
+                type: Number,
+                required: true
+              }
+            }
+          });
+  
+          try {
+            yield model.insert({
+              name: 23,
+              hasKids: true
+            });          
+          } catch (err) {
+            console.log( err.failures );
+
+            /*
+              [
+                "/name: must be a string"
+                "/age: missing value"
+              ]            
+             */
+          }
+         
+        :marked
+          _Note: Although `hasKids` is present in the inserted document, 
+          the validator will ignore it since it isn't present in the schema._
+
+          Nested hierarchies can also be validated:
+
+        +code('javascript').
+          const model = yield db.model('students', {
+            schema: {
+              name: {
+                type: String
+              },
+              address: {
+                type: {
+                  houseNum: {
+                    type: Number,
+                    required: true
+                  },
+                  streetName: {
+                    type: String,
+                    required: true
+                  },
+                  country: {
+                    type: String,
+                    required: true
+                  }
+                }
+              }
+            }
+          });
+  
+          try {
+            yield model.insert({
+              name: 23,
+              address: {
+                houseNum: 'view street',
+                streetName: 23
+              }
+            });
+          } catch (err) {
+            console.log(err.failures);
+
+            /*
+              [ 
+                "/address/houseNum: must be a number",
+                "/address/streetName: must be a string",
+                "/address/country: missing value",
+              ]
+            */
+          }
+
+
+      section#indexes
+        :marked
+          ## Index creation
+
+          The Thinodium core library does not assume the use of database indexes. 
+          However, individual db adapters may opt to support them. The RethinkDB 
+          adapter will create indexes for you if they don't exist:
+
+        +code('javascript').
+          const model = yield db.collection('students', {
+            indexes: [
+              { name: 'name' },
+              {
+                name: 'sports',
+                options: {
+                  multi: true
+                }
+              } 
+            ]
+          });
+
+          // at this point the indexes are created and ready, so we can use them
+          // in queries.
+
+          let jeffs = yield model.rawQry().getAll("jeff", { index: 'name'}).run();
+
+          console.log( jeffs.length ); /* 1 */
+         
+        :marked
+          _Note: The [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) adapter readme has more information on what types of indexes can be created._
+
+      section#hooks
+        :marked
+          ## Hooks
+
+          Hooks allow you to perform additional processing upon 
+          data before and/or after all inserts, updates and removals.
+
+          Hooks are implemented as events which get emmitted during the raw 
+          querying methods:
+
+        +code('javascript').
+          const model = yield db.model('students');
+
+          // run before insertion
+          collection.on('before:rawInsert', function(attrs) {
+            console.log('before');
+
+            attrs.hasKids = true;
+          });
+
+          // run after insertion
+          collection.on('after:rawInsert', function(doc) {
+            console.log('after');
+
+            console.log(doc);
+          });
+
+          collection.insert({
+            name: 'Janice'
+          });
+
+          /*
+            before
+          */
+         
+          /*
+            after
+            {
+              id: // auto-generated id
+              name: 'Janice',
+              hasKids: true
+            }  
+          */
+
+        :marked
+          Since `Thinodium.Model` inherits from [EventEmitter](https://github.com/primus/eventemitter3) all the usual 
+          event handling benefits are available.
+
+          The full list of  events which can be listened to:
+
+          * `before:rawGet`
+          * `after:rawGet`
+          * `before:rawInsert`
+          * `after:rawInsert`
+          * `before:rawUpdate`
+          * `after:rawUpdate`
+          * `before:rawRemove`
+          * `after:rawRemove`
+
+          Each `before:` handler will receive all the arguments passed into the 
+          equivalent raw querying method.
+
+      section#adapters
+        :marked
+          ## Database adapters 
+
+          Thinodium is database engine-agnostic. To add support for your 
+          database engine of choice you can write an adapter. 
+
+          An adapter has to extend the base `Database` and `Model` classes and 
+          override the necessary internal methods:
+
+        +code('javascript').
+          /* File: /path/to/myAdapter.js */
+
+          "use strict";
+
+          const Thinodium = require('thinodium');
+
+          class Database extends Thinodium.Database {
+            _connect (options) {
+              return new Promise((resolve, reject) => {
+                // do what's needed for connection here and save into "connection" var
+                resolve(connection);      
+              });
+            }
+
+            _disconnect (connection) {
+              return new Promise((resolve, reject) => {
+                // disconnect connection
+                resolve();
+              });
+            }
+
+            _model (connection, name, config) {
+              return new Model(connection, name, config);
+            }
+          }
+
+          class Model extends Thinodium.Model {
+            rawQry() {
+              // return object for doing raw querying
+            }
+
+            rawGet (id) {
+              return new Promise((resolve, reject) => {
+                // fetch doc with given id
+                resolve(doc);      
+              });
+            }
+
+            rawInsert (attrs) {
+              return new Promise((resolve, reject) => {
+                // insert doc
+                resolve(doc);      
+              });
+            }
+
+            rawUpdate (id, changes, document) {
+              return new Promise((resolve, reject) => {
+                // update doc
+                resolve();
+              });
+            }
+
+            rawRemove (id) {
+              return new Promise((resolve, reject) => {
+                // remove doc with id
+                resolve();      
+              });
+            }
+          }
+
+          module.exports = Database;
+
+        :marked
+          Once you've written your adapter you can use it in Thinodium as follows:
+
+        +code('javascript').
+          const db = yield Thinodium.connect('/path/to/myAdapter.js', {
+            /* connection options here */
+          });
+
+        :marked
+          Alternatively, if the adapter is an NPM module then you can load it in 
+          via its suffix name:
+
+        +code('javascript').
+          // Adapter is an NPM module: thinodium-myAdapter
+          const db = yield Thinodium.connect('myAdapter', {
+            /* connection options here */
+          });
+
+        :marked
+          If you are going to publish your adapter as an NPM module please ensure
+          the following:
+
+          * The NPM package name MUST be prefixed with `thinodium-`. 
+          For example, an adapter for Mongo might be called `thinodium-mongo`.
+
+          * It MUST require `thinodium` as a **peerDependency** and NOT as a 
+          direct dependency. This affords library users more control over what 
+          version of Thinodium they use.
+          
+          * It SHOULD have automated tested which call into the core Thinodium 
+          methods. For a good example see [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) tests.
+          
+          * Once it is published please [let us know](https://twitter.com/hiddentao)!
+
+          All existing adapters are [viewable on NPM](https://www.npmjs.com/search?q=thinodium).
+
+
+      section#api
+        h2 API
+
+      footer
+        p By <a href="https://twitter.com/hiddentao">@hiddentao</a>. Source on <a href="https://github.coom/hiddentao/thinodium">Github</a>.
+
+    script(type="text/javascript", src="js/prism.js")
+    script(type="text/javascript", src="js/jquery.js")
+    script(type="text/javascript", src="js/scrollSpy.js")
+    script(type="text/javascript", src="js/main.js")      
+
+
+
+    

@@ -1,0 +1,269 @@
+@import 'nib';
+@import 'rupture';
+@import './responsive-pixels'
+
+global-reset();
+
+$color1 = #0E3E3D
+$color2 = #268A82
+$color3 = #59D6D1
+$color4 = #AEC03B
+$color5 = #F7F5E7
+
+$body-color = $color5
+$body-text-color = #333
+  
+$font-code = 'Courier New', monospace
+$font-body = 'Noto Sans', Arial, Verdana, sans-serif
+
+$width-xs = 900px
+
+html
+  font-size 14px
+
+body
+  background-color $body-color
+  color $body-text-color
+  font-family $font-body
+  font-size 24px
+  
+  
+a
+  color $color2
+  text-decoration none
+  border-bottom 1px solid $color2
+  &:hover
+    background-color $color2
+    color $body-color
+    border-radius 5px
+    
+  i
+    margin-right 6px
+    
+
+pre[class*="language-"]
+  display inline-block
+  font-size 18px
+  border-radius 10px
+  padding 5px 15px
+  margin 0
+  max-width 98%
+  overflow-x scroll
+
+code
+  font-family $font-code
+
+strong
+  font-weight bold
+  
+em
+  font-style italic
+
+table
+  background-color #fff
+  border-collapse collapse
+  margin 30px 0
+  
+  td, th
+    padding 10px
+  th
+    border 2px solid #000
+    font-weight bold
+  td
+    border 1px solid #000
+
+header 
+  width 15%
+  background $color1
+  position fixed
+  top 0px
+  left 0px
+  height 100%
+  padding 16px
+  +below($width-xs)
+    display none
+      
+  h2
+    font-family "Bree Serif", serif
+    color $body-color
+    font-size 30px
+    margin-bottom 5px
+    
+  a
+    font-family "Helvetica Neue", "Open Sans", sans-serif
+    color $color3
+    padding 0.2em
+    border-bottom none
+    font-size 18px
+   
+  nav
+    padding-bottom 30px
+    margin-bottom 20px
+    border-bottom 1px solid #000
+    & > ul
+      & > li 
+        margin 15px 0
+      ul
+        margin-left 20px
+        font-size 80%
+        li
+          margin 5px 0
+    li.active
+      & > a
+        background-color $color2
+        color $body-color
+        border-radius 5px
+
+
+
+main 
+  width 70%
+  position relative
+  left 20%
+  padding 16px
+  +below($width-xs)
+    position static
+    width 90%
+    
+  .links
+    margin 10px 0 40px
+    a
+      font-family "Bree Serif", serif
+      display inline-block
+      font-size 15px
+      margin-right 10px
+      i
+        margin-right 5px
+
+  section
+    line-height 30px
+
+    pre
+      width 90%
+
+    p
+      margin 30px 0
+      
+      code
+        font-family monospace
+        font-size 30px
+        margin 0 5px
+        color $color4
+    ul
+      margin 0 0 0 50px
+      list-style disc
+
+  h1, h2, h3
+    font-family "Bree Serif", serif
+    
+  h2
+    margin 40px 0
+    font-size 35px
+    font-weight bold
+  h3
+    margin 20px 0
+    font-size 20px
+    font-weight bold
+
+  h1
+    font-size 80px
+    font-weight 400
+    small 
+      display block
+      margin 10px 0 0
+      font-size 40px
+      font-family "Helvetica Neue", "Open Sans", sans-serif
+      font-weight 100
+      color #666
+      
+  footer
+    font-size 16px
+    margin-top 30px
+    padding-top 20px
+
+
+
+#api
+  h3
+    font-family $font-code
+    font-weight normal
+    font-size 120%
+    margin-top 2em
+    
+  section dl
+    margin 0 0 0 1em
+    font-size 80%
+    
+    dt
+      font-weight bold
+      font-size 110%
+      
+      &.constructor
+        font-style italic
+      
+      &.static
+        &:after
+          content 'Static'
+          color #999
+          display inline-block
+          font-style italic
+          margin-left 0.5em
+          
+      .type
+        margin-left 1em
+        font-weight normal
+
+    dd
+      background-color $color4
+      margin 0.2em 0 2em
+      padding 0.5em
+      overflow-x scroll
+            
+      label
+        font-family $font-body
+        display block
+        font-style italic
+
+      .desc + .params
+        margin-top 2em
+  
+      .params, .keys
+        ul
+          margin 0
+          padding 0 0 0 1em
+          list-style none
+          li
+            display block
+            margin-top 1.5em
+            &:first-child
+              margin-top 0.5em
+            
+        .name, .type, .default, .value
+          display inline-block
+          margin-right 2em
+        .name
+          font-family $font-code
+          font-weight bold
+        .type
+          font-family $font-code
+          color $color1
+          font-size 80%
+        .default
+          font-style italic
+          color #666
+          font-size 80%
+          &:before
+            content 'Default: '
+            font-style italic
+            color #666
+        .value
+          font-size 80%
+        .desc
+          display block
+
+      .return
+        margin-top 2em
+        .type
+          margin 0 1em 0
+
+

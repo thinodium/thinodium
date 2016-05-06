@@ -1,0 +1,37 @@
+{
+  "name": "thinodium-docs",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Documentation site for Thinodium",
+  "main": "gulpfile.js",
+  "scripts": {
+    "dev": "gulp watch",
+    "build": "gulp",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/hiddentao/thinodium.git"
+  },
+  "keywords": [
+    "thinodium",
+    "docs"
+  ],
+  "author": "Ramesh Nair <ram@hiddentao.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hiddentao/thinodium/issues"
+  },
+  "homepage": "https://github.com/hiddentao/thinodium",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-expect-file": "0.0.7",
+    "gulp-minify-css": "^0.3.13",
+    "gulp-pug": "^2.0.0",
+    "gulp-stylus": "^2.0.0",
+    "jstransformer-marked": "^1.0.1",
+    "nib": "^1.0.4",
+    "run-sequence": "^1.0.2",
+    "rupture": "^0.6.1"
+  }
+}
