@@ -35,10 +35,10 @@ Let's first create a database connection:
 
 ```js
 // thinodium instance
-const thinodium = require('thinodium');
+const Thinodium = require('thinodium');
 
 // create the connection
-const db = yield thinodium.connect('rethinkdb', {
+const db = yield Thinodium.connect('rethinkdb', {
   db: 'mydb',
 });
 ```
@@ -54,7 +54,7 @@ provide its path to `connect()`:
 
 ```js
 // connect using custom adatper
-const db = yield thinodium.connect('path/to/custom/adapter', {
+const db = yield Thinodium.connect('path/to/custom/adapter', {
   db: 'mydb',
 });
 
@@ -168,9 +168,9 @@ override the necessary internal methods:
 ```js
 "use strict";
 
-const thinodium = require('thinodium');
+const Thinodium = require('thinodium');
 
-class Database extends thinodium.Database {
+class Database extends Thinodium.Database {
   _connect (options) {
     return new Promise((resolve, reject) => {
       // do what's needed for connection here and save into "connection" var
