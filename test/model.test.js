@@ -48,6 +48,17 @@ test['basic'] = {
 
     m.schema.should.be.instanceof(Schema);
   },
+  'with model methods': function*() {
+    let m = new Model(2, 'table', { 
+      modelMethods: {
+        getName: function() {
+          return this.name;
+        }
+      },
+    });
+
+    m.getName().should.be.eq('table');
+  },
 };
 
 
