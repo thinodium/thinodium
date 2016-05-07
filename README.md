@@ -1,4 +1,4 @@
-# Thinodium
+# ![Thinodium](https://hiddentao.github.io/thinodium/img/logo.svg)
 
 [![Build Status](https://travis-ci.org/hiddentao/thinodium.svg?branch=master)](http://travis-ci.org/hiddentao/thinodium)
 
