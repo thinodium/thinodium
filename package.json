@@ -1,6 +1,6 @@
 {
   "name": "thinodium",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Light-weight, pluggable ODM for Node.js. Supports RethinkDB, etc",
   "main": "index.js",
   "engines": {

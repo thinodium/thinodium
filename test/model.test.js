@@ -79,6 +79,26 @@ test['get'] = function*() {
 
 
 
+
+test['getAll'] = function*() {
+  let m = new Model(2);
+
+  this.mocker.stub(m, 'wrapRaw', (rawDocs) => {
+    return _.map(rawDocs, (rawDoc) => {
+      return rawDoc ? '=' + rawDoc + '=' : 'none';
+    });
+  });
+
+  this.mocker.stub(m, 'rawGetAll', () => {
+    return Q.resolve([1,2,3]);
+  });
+
+  m.getAll().should.eventually.eql(['=1=', '=2=', '=3=']);
+};
+
+
+
+
 test['insert'] = function*() {
   let m = new Model(2);
 
@@ -115,6 +135,9 @@ test['fixture methods'] = {
   },
   'rawGet': function*() {
     this.m.rawGet().should.eventually.be.rejectedWith('Not yet implemented')
+  },
+  'rawGetAll': function*() {
+    this.m.rawGetAll().should.eventually.be.rejectedWith('Not yet implemented')
   },
   'rawUpdate': function*() {
     this.m.rawUpdate().should.eventually.be.rejectedWith('Not yet implemented')
