@@ -53,11 +53,15 @@ test['basic'] = {
       modelMethods: {
         getName: function() {
           return this.name;
-        }
+        },
+        getNameGen: function*() {
+          return this.name;
+        },
       },
     });
 
     m.getName().should.be.eq('table');
+    (yield m.getNameGen()).should.be.eq('table');
   },
 };
 
@@ -193,6 +197,9 @@ test['wrap doc'] = {
       docMethods: {
         getName: function() {
           return this.name;
+        },
+        getNameGen: function*() {
+          return this.name;
         }
       }
     });
@@ -203,6 +210,7 @@ test['wrap doc'] = {
     });
 
     d.getName().should.eql('john');
+    (yield d.getNameGen()).should.eql('john');
   },
   'adds virtuals': function*() {
     let m = new Model(null, 'table', {
