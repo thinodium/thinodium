@@ -396,7 +396,7 @@ html
                   });
               },
             }
-          });
+          });§
 
           let students = yield model.getStudentsWhoPlay('tennis');
 
@@ -405,9 +405,9 @@ html
           console.log( students[0] instanceof Thinodium.Document ); /* true */
 
         :marked
-          It is highly recommended that your custom methods return
-          `Promise` objects and that the resolved result is wrapped in 
-          `Document` instances, as shown above.
+          Custom methods can be _generator functions_ too. However it is recommended 
+          that your custom methods return `Promise` objects and that the 
+          actual results are wrapped in `Document` instances, as shown above.
 
       section#doc_methods
         :marked
