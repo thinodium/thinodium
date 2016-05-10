@@ -396,6 +396,13 @@ var apiDocs = {
         },
         desc: 'Get document with given primary key value.',
       },
+      'getAll': {
+        ret: {
+          type: ['Promise'],
+          desc: 'Resolved with `Array` of [[Thinodium.Document]] instances',
+        },
+        desc: 'Get all documents.',
+      },
       'insert': {
         params: {
           attrs: {
@@ -428,6 +435,13 @@ var apiDocs = {
           desc: 'Resolved with raw data if found, `null` otherwise',
         },
         desc: 'Get raw document with given primary key value.',
+      },
+      'rawGetAll': {
+        ret: {
+          type: ['Promise'],
+          desc: 'Resolved with array of raw documents.',
+        },
+        desc: 'Get all documents.',
       },
       'rawInsert': {
         params: {
