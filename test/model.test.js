@@ -231,7 +231,13 @@ test['events'] = {
   beforeEach: function*() {
     class TestModel extends Model {}
 
-    ['rawInsert', 'rawRemove', 'rawUpdate', 'rawGet'].forEach((method) => {
+    [
+      'rawInsert', 
+      'rawRemove', 
+      'rawUpdate', 
+      'rawGet',
+      'rawGetAll',
+    ].forEach((method) => {
       TestModel.prototype[method] = function() {
         if (this.shouldThrow) {
           return Q.reject(new Error(`${method} throw`));
@@ -245,7 +251,13 @@ test['events'] = {
   },
 };
 
-['rawInsert', 'rawRemove', 'rawUpdate', 'rawGet'].forEach((method) => {
+[
+  'rawInsert', 
+  'rawRemove', 
+  'rawUpdate', 
+  'rawGet',
+  'rawGetAll',
+].forEach((method) => {
   test['events'][method] = {
     'entry': function*() {
       let m = new (this.TestModel);

@@ -204,6 +204,13 @@ class Model extends thinodium.Model {
     });
   }
 
+  rawGetAll (id) {
+    return new Promise((resolve, reject) => {
+      // fetch all docs
+      resolve(docs);      
+    });
+  }
+
   rawInsert (attrs) {
     return new Promise((resolve, reject) => {
       // insert doc
