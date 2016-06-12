@@ -313,6 +313,11 @@ var apiDocs = {
         type: ['Boolean'],
         desc: '`true` if connected, `false` otherwise.',
       },      
+      connection: {
+        property: true,
+        type: ['Object'],
+        desc: 'The underlying raw database connection.',
+      },      
     },
   },
   'Thinodium.Model': {
