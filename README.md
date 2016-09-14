@@ -12,7 +12,8 @@ Features:
 * Fully pluggable - easy to add support for your NoSQL DB of choice
 * Listen to before and after events on internal asynchronous methods
 * Schema validation ([simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema)).
-* [Fully documented](https://hiddentao.com/thinodium/)
+
+Documentation available at[https://hiddentao.github.io/thinodium/](https://hiddentao.github.io/thinodium/).
 
 ## Installation
 
