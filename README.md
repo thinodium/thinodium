@@ -2,7 +2,6 @@
 
 [![Build Status](https://travis-ci.org/hiddentao/thinodium.svg?branch=master)](http://travis-ci.org/hiddentao/thinodium)
 [![NPM module](https://badge.fury.io/js/thinodium.png)](https://www.npmjs.com/package/thinodium)
-[![NPM downloads](https://img.shields.io/npm/dm/thinodium.svg?maxAge=2592000)](https://www.npmjs.com/package/thinodium)
 [![Join the chat at https://discord.gg/bYt4tWB](https://img.shields.io/badge/discord-join%20chat-738bd7.svg?style=flat-square)](https://discord.gg/bYt4tWB)
 [![Follow on Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/hiddentao)
 
