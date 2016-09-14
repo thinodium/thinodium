@@ -13,7 +13,7 @@ Features:
 * Listen to before and after events on internal asynchronous methods
 * Schema validation ([simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema)).
 
-Documentation available at[https://hiddentao.github.io/thinodium/](https://hiddentao.github.io/thinodium/).
+Read the [documentation](https://hiddentao.github.io/thinodium/) for more.
 
 ## Installation
 
