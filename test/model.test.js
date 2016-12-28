@@ -2,7 +2,7 @@
 
 var _ = require('lodash'),
   Q = require('bluebird'),
-  Schema = require('simple-nosql-schema')({}).constructor;
+  Schema = require('sjv')({}).constructor;
 
 
 
@@ -37,7 +37,7 @@ test['basic'] = {
     m.pk.should.eql('test');
   },
   'with schema': function*() {
-    let m = new Model(2, 'table', { 
+    let m = new Model(2, 'table', {
       schema: {
         name: {
           type: String,
@@ -49,7 +49,7 @@ test['basic'] = {
     m.schema.should.be.instanceof(Schema);
   },
   'with model methods': function*() {
-    let m = new Model(2, 'table', { 
+    let m = new Model(2, 'table', {
       modelMethods: {
         getName: function() {
           return this.name;
@@ -228,7 +228,7 @@ test['wrap doc'] = {
       name: 'john',
     });
 
-    d.nickname.should.eql('lil\' john');    
+    d.nickname.should.eql('lil\' john');
   },
 };
 
@@ -240,9 +240,9 @@ test['events'] = {
     class TestModel extends Model {}
 
     [
-      'rawInsert', 
-      'rawRemove', 
-      'rawUpdate', 
+      'rawInsert',
+      'rawRemove',
+      'rawUpdate',
       'rawGet',
       'rawGetAll',
     ].forEach((method) => {
@@ -260,9 +260,9 @@ test['events'] = {
 };
 
 [
-  'rawInsert', 
-  'rawRemove', 
-  'rawUpdate', 
+  'rawInsert',
+  'rawRemove',
+  'rawUpdate',
   'rawGet',
   'rawGetAll',
 ].forEach((method) => {
@@ -312,8 +312,3 @@ test['events'] = {
     },
   };
 });
-
-
-
-
-

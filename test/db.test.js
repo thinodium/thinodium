@@ -2,7 +2,7 @@
 
 var _ = require('lodash'),
   Q = require('bluebird'),
-  Schema = require('simple-nosql-schema')({}).constructor;
+  Schema = require('sjv')({}).constructor;
 
 
 
@@ -109,8 +109,3 @@ test['model'] = {
     model.init.should.have.been.calldeOnce;
   },
 };
-
-
-
-
-
