@@ -13,7 +13,7 @@ Features:
 * ES6-ready with Promises, no callbacks
 * Allows you to handle connections yourself
 * Add virtual fields to documents
-* Fully pluggable - easy to add support for your NoSQL DB of choice
+* Fully pluggable - easy to add support for your DB of choice
 * Listen to before and after events on internal asynchronous methods
 * Schema validation ([sjv](https://github.com/hiddentao/sjv)).
 
@@ -31,6 +31,7 @@ This package provides the core infrastructure. To actually access a particular
 database you will need to additionally install one of the following adapters:
 
 * [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) - RethinkDB
+* [thinodium-knex](https://github.com/hiddentao/thinodium-knex) - Knex
 
 _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
