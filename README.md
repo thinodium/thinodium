@@ -1,4 +1,4 @@
-# ![Thinodium](https://hiddentao.github.io/thinodium/img/logo.svg)
+# ![Thinodium](https://thinodium.github.io/img/logo.svg)
 
 [![Build Status](https://travis-ci.org/thinodium/thinodium.svg?branch=master)](http://travis-ci.org/thinodium/thinodium)
 [![npm](https://img.shields.io/npm/v/thinodium.svg?maxAge=2592000)](https://www.npmjs.com/package/thinodium)
@@ -17,7 +17,7 @@ Features:
 * Listen to before and after events on internal asynchronous methods
 * Schema validation ([sjv](https://github.com/hiddentao/sjv)).
 
-Read the [documentation](https://hiddentao.github.io/thinodium/) for more.
+Read the [documentation](https://thinodium.github.io/) for more.
 
 ## Installation
 
