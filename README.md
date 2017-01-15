@@ -31,7 +31,7 @@ This package provides the core infrastructure. To actually access a particular
 database you will need to additionally install one of the following adapters:
 
 * [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) - RethinkDB
-* [thinodium-knex](https://github.com/hiddentao/thinodium-knex) - Knex
+* [thinodium-knex](https://github.com/hiddentao/thinodium-knex) - Knex (Postgres, Sqlite, etc)
 
 _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
