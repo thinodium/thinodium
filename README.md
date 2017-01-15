@@ -1,6 +1,6 @@
 # ![Thinodium](https://hiddentao.github.io/thinodium/img/logo.svg)
 
-[![Build Status](https://travis-ci.org/hiddentao/thinodium.svg?branch=master)](http://travis-ci.org/hiddentao/thinodium)
+[![Build Status](https://travis-ci.org/thinodium/thinodium.svg?branch=master)](http://travis-ci.org/thinodium/thinodium)
 [![npm](https://img.shields.io/npm/v/thinodium.svg?maxAge=2592000)](https://www.npmjs.com/package/thinodium)
 [![Join the chat at https://discord.gg/bYt4tWB](https://img.shields.io/badge/discord-join%20chat-738bd7.svg?style=flat-square)](https://discord.gg/bYt4tWB)
 [![Follow on Twitter](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=Follow&maxAge=2592000)](https://twitter.com/hiddentao)
@@ -30,8 +30,8 @@ $ npm install thinodium
 This package provides the core infrastructure. To actually access a particular
 database you will need to additionally install one of the following adapters:
 
-* [thinodium-rethinkdb](https://github.com/hiddentao/thinodium-rethinkdb) - RethinkDB
-* [thinodium-knex](https://github.com/hiddentao/thinodium-knex) - Knex (Postgres, Sqlite, etc)
+* [thinodium-rethinkdb](https://github.com/thinodium/thinodium-rethinkdb) - RethinkDB
+* [thinodium-knex](https://github.com/thinodium/thinodium-knex) - Knex (Postgres, Sqlite, etc)
 
 _NOTE: Please raise a PR if you want me to add your adapter to the above list_.
 
@@ -255,8 +255,8 @@ To run the tests:
 
 ## Contributing
 
-Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/hiddentao/thinodium/blob/master/CONTRIBUTING.md).
+Contributions are welcome! Please see [CONTRIBUTING.md](https://github.com/thinodium/thinodium/blob/master/CONTRIBUTING.md).
 
 ## License
 
-MIT - see [LICENSE.md](https://github.com/hiddentao/thinodium/blob/master/LICENSE.md)
+MIT - see [LICENSE.md](https://github.com/thinodium/thinodium/blob/master/LICENSE.md)
