@@ -30,6 +30,7 @@ $ npm install thinodium
 This package provides the core infrastructure. To actually access a particular
 database you will need to additionally install one of the following adapters:
 
+* [thinodium-mongodb](https://github.com/thinodium/thinodium-rethinkdb) - MongoDB
 * [thinodium-rethinkdb](https://github.com/thinodium/thinodium-rethinkdb) - RethinkDB
 * [thinodium-knex](https://github.com/thinodium/thinodium-knex) - Knex (Postgres, Sqlite, etc)
 
