@@ -131,6 +131,16 @@ user.padName('test');
 console.log(user2.fullName); /* marktest smith */
 ```
 
+Note that you can access the parent model for a document using `getModel()`:
+
+```js
+let user = yield model.insert({
+  name: 'john'
+});
+
+console.log( user.getModel() === model ) /* true */
+```
+
 **Schema validation**
 
 Schema validation is performed by [simple-nosql-schema](https://github.com/hiddentao/simple-nosql-schema), and is used if a schema is provided in the initial model config:

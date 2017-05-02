@@ -21,9 +21,11 @@ var test = utils.createTest(module);
 
 test['simple'] = {
   beforeEach: function*() {
-    this.d = new Document({
+    this.model = {
       pk: '_id',
-    }, {
+    }
+    
+    this.d = new Document(this.model, {
       _id: 123,
       name: 'john',
     });
@@ -40,6 +42,9 @@ test['simple'] = {
   },
   'changes()': function*() {
     this.d.changes().should.eql({});
+  },
+  'getModel()': function*() {
+    this.d.getModel().should.eql(this.model);
   },
 };
 
@@ -294,7 +299,7 @@ test['reload'] = {
       age: 23,
       father: 'eric',
       hasKids: true
-    });  
+    });
   },
 
   'calls through to collection in raw mode': function*() {
@@ -403,4 +408,3 @@ test['virtuals'] = {
     });
   }
 };
-
